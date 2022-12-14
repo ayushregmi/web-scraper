@@ -4,8 +4,9 @@ import pandas as pd
 
 base_url = "https://fbref.com"
 url = "https://fbref.com/en/comps/Big5/stats/players/Big-5-European-Leagues-Stats"
+url_header = {'User-Agent': 'Custom'}
 
-html = requests.get(url=url).text
+html = requests.get(url=url, headers=url_header).text
 
 soup = BeautifulSoup(html, "html.parser")
 
@@ -19,21 +20,29 @@ for l in soup:
 url = stats_url[0]
 
 table_columns = []
-for url in stats_url:
     
-    html = requests.get(url=url).text
+html = requests.get(url=url, headers=url_header).text
+soup = BeautifulSoup(html, "html.parser")
+table = soup.find("table")
 
-    soup = BeautifulSoup(html, "html.parser")
+table_header = table.find("thead").find_all('tr')[1]
+for h in table_header.find_all("th")[1:]:
+    table_columns.append(h.text.strip())
 
-    table = soup.find("table")
+statsFrame = pd.DataFrame(columns=table_columns)
 
-    table_header = table.find("thead").find_all('tr')[1]
+table_body = table.find("tbody")
+for row in table_body.find_all("tr"):
+    try:
+        if row['class']:
+            continue
+    except:
+        temp = []
+        cols = row.find_all("td")
+        
+        for col in cols:
+            temp.append(col.text)
+        statsFrame = pd.concat([statsFrame, pd.DataFrame([temp], columns=statsFrame.columns)], ignore_index=True)
+            
 
-
-    for h in table_header.find_all("th"):
-        h = h.text.strip()
-    
-        if h not in table_columns:
-            table_columns.append(h)
-    
-print(table_columns)
+print(statsFrame)
