@@ -44,13 +44,7 @@ def get_Data(url, url_header=None):
                 
     return statsFrame
     
-    
-initialFrame = get_Data(stats_url[0])
 
-for url in stats_url[3:4]:
-    initialFrame = initialFrame.merge(get_Data(url), on=["Player"], copy=False, how="outer", suffixes=("_DRIP", "_DROP"))
-    
-print(initialFrame)
+data = get_Data(stats_url[0])
 
-print(initialFrame.columns)
-print(initialFrame.iloc[0])
+print(data['Comp'].value_counts())

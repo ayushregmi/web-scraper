@@ -16,7 +16,7 @@ club_url_list = []
 
 players = pd.DataFrame(columns=['name', 'price'])
 
-for url in league_url[:1]: 
+for url in league_url: 
     html = requests.get(url, headers=url_header).text
 
     soup = BeautifulSoup(html, "html.parser")
