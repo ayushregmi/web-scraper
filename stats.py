@@ -55,6 +55,6 @@ def get_Data(url, url_header=None):
 # data = get_Data(stats_url[0])
 # print(data['Comp'].value_counts())
 
-for url in stats_url[:2]:
+for url in stats_url:
     get_Data(url)
 
