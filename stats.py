@@ -20,9 +20,13 @@ def get_Data(url, url_header=None):
     
     soup = BeautifulSoup(html, "html.parser")
     temp = soup.find("div", {"id": "content"})
-
-    csv_name = '_'.join(temp.find_all("h2")[1].text.split(' '))
     
+    temp_len = len(temp.find_all("h2"))
+    
+    # print(temp.find_all("h2")[temp_len-2].text)
+
+    # csv_name = '_'.join(temp.find_all("h2")[1].text.split(' '))
+    csv_name = '_'.join(temp.find_all("h2")[temp_len-2].text.split(' '))
     table_columns = []
     
     table = soup.find("table")
@@ -47,8 +51,10 @@ def get_Data(url, url_header=None):
             statsFrame = pd.concat([statsFrame, pd.DataFrame([temp], columns=statsFrame.columns)], ignore_index=True)
     
     statsFrame.to_csv(csv_name+".csv", index=True)
-    
+    # return statsFrame
 
 for url in stats_url:
     get_Data(url)
+
+
 
