@@ -24,8 +24,7 @@ def get_Data(url, url_header=None):
     csv_name = '_'.join(temp.find_all("h2")[1].text.split(' '))
     
     table_columns = []
-        
-    # soup = BeautifulSoup(html, "html.parser")
+    
     table = soup.find("table")
 
     table_header = table.find("thead").find_all('tr')[1]
@@ -49,11 +48,6 @@ def get_Data(url, url_header=None):
     
     statsFrame.to_csv(csv_name+".csv", index=True)
     
-    # return statsFrame
-    
-
-# data = get_Data(stats_url[0])
-# print(data['Comp'].value_counts())
 
 for url in stats_url:
     get_Data(url)
