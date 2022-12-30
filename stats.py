@@ -16,11 +16,16 @@ for l in soup:
     stats_url.append(base_url+l.find("a")['href'])
 
 def get_Data(url, url_header=None):
+    html = requests.get(url=url, headers=url_header).text
+    
+    soup = BeautifulSoup(html, "html.parser")
+    temp = soup.find("div", {"id": "content"})
 
+    csv_name = '_'.join(temp.find_all("h2")[1].text.split(' '))
+    
     table_columns = []
         
-    html = requests.get(url=url, headers=url_header).text
-    soup = BeautifulSoup(html, "html.parser")
+    # soup = BeautifulSoup(html, "html.parser")
     table = soup.find("table")
 
     table_header = table.find("thead").find_all('tr')[1]
@@ -41,10 +46,15 @@ def get_Data(url, url_header=None):
             for col in cols:
                 temp.append(col.text)
             statsFrame = pd.concat([statsFrame, pd.DataFrame([temp], columns=statsFrame.columns)], ignore_index=True)
-                
-    return statsFrame
+    
+    statsFrame.to_csv(csv_name+".csv", index=True)
+    
+    # return statsFrame
     
 
-data = get_Data(stats_url[0])
+# data = get_Data(stats_url[0])
+# print(data['Comp'].value_counts())
 
-print(data['Comp'].value_counts())
+for url in stats_url[:2]:
+    get_Data(url)
+
