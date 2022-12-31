@@ -60,7 +60,7 @@ def get_Data(url, url_header=None):
                 temp.append(col.text)
             statsFrame = pd.concat([statsFrame, pd.DataFrame([temp], columns=statsFrame.columns)], ignore_index=True)
     
-    statsFrame.to_csv(csv_name+".csv", index=True)
+    statsFrame.to_csv(csv_name+".csv")
     return statsFrame
 
 for i, url in enumerate(stats_url):
